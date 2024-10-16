@@ -1,7 +1,7 @@
 VERSION         := 3.2.4
 
 PACK            := stackmgmt
-ORG							:= pulumi-pequod
+ORG							:= pulumi-initech
 PROJECT         := github.com/${ORG}/${PACK}
 
 PROVIDER        := pulumi-resource-${PACK}

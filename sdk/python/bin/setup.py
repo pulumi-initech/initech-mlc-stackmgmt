@@ -17,14 +17,14 @@ def readme():
         return "stackmgmt Pulumi Package - Development Version"
 
 
-setup(name='pequod_stackmgmt',
+setup(name='initech_stackmgmt',
       python_requires='>=3.7',
       version=VERSION,
       long_description=readme(),
       long_description_content_type='text/markdown',
       packages=find_packages(),
       package_data={
-          'pequod_stackmgmt': [
+          'initech_stackmgmt': [
               'py.typed',
               'pulumi-plugin.json',
           ]

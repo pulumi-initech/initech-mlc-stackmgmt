@@ -1,6 +1,6 @@
 {
     "name": "stackmgmt",
-    "pluginDownloadURL": "github://api.github.com/pulumi-pequod/pequod-mlc-stackmgmt",
+    "pluginDownloadURL": "github://api.github.com/pulumi-initech/initech-mlc-stackmgmt",
     "resources": {
         "stackmgmt:index:StackSettings": {
             "isComponent": true,
@@ -24,6 +24,13 @@
                 "pulumiAccessToken": {
                     "type": "string",
                     "description": "Pulumi access token to set up as a deployment environment variable if provided."
+                },
+                "stackOutputs": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "A list of output properties to expose via ESC pulumi-stacks"
                 }
             },
             "requiredInputs": [
@@ -36,7 +43,7 @@
     },
     "language": {
         "csharp": {
-            "rootNamespace": "Pequod",
+            "rootNamespace": "Initech",
             "packageReferences": {
                 "Pulumi": "3.*",
                 "Pulumi.PulumiService": "0.*",
@@ -46,11 +53,11 @@
         },
         "go": {
             "generateResourceContainerTypes": true,
-            "importBasePath": "github.com/pulumi-pequod/pequod-mlc-stackmgmt/sdk/go/stackmgmt",
+            "importBasePath": "github.com/pulumi-initech/initech-mlc-stackmgmt/sdk/go/stackmgmt",
             "respectSchemaVersion": true
         },
         "nodejs": {
-            "packageName": "@pequod/stackmgmt",
+            "packageName": "@initech/stackmgmt",
             "dependencies": {
                 "@pulumi/pulumi": "^3.0.0",
                 "@pulumi/pulumiservice": "^0.20.2",
@@ -66,7 +73,7 @@
             "respectSchemaVersion": true
         },
         "python": {
-            "packageName": "pequod_stackmgmt",
+            "packageName": "initech_stackmgmt",
             "requires": {
                 "pulumi": ">=3.0.0,<4.0.0",
                 "pulumi-pulumiservice": ">=0.0.0,<1.0.0",

@@ -1,4 +1,4 @@
-module github.com/pulumi-pequod/pequod-mlc-stackmgmt
+module github.com/pulumi-initech/initech-mlc-stackmgmt
 
 go 1.21
 

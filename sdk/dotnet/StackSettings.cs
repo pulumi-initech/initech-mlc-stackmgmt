@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Pulumi.Serialization;
 using Pulumi;
 
-namespace Pequod.Stackmgmt
+namespace Initech.Stackmgmt
 {
     [StackmgmtResourceType("stackmgmt:index:StackSettings")]
     public partial class StackSettings : global::Pulumi.ComponentResource
@@ -30,7 +30,7 @@ namespace Pequod.Stackmgmt
             var defaultOptions = new ComponentResourceOptions
             {
                 Version = Utilities.Version,
-                PluginDownloadURL = "github://api.github.com/pulumi-pequod/pequod-mlc-stackmgmt",
+                PluginDownloadURL = "github://api.github.com/pulumi-initech/initech-mlc-stackmgmt",
             };
             var merged = ComponentResourceOptions.Merge(defaultOptions, options);
             // Override the ID if one was specified for consistency with other language SDKs.
@@ -58,6 +58,18 @@ namespace Pequod.Stackmgmt
         /// </summary>
         [Input("pulumiAccessToken")]
         public Input<string>? PulumiAccessToken { get; set; }
+
+        [Input("stackOutputs")]
+        private InputList<string>? _stackOutputs;
+
+        /// <summary>
+        /// A list of output properties to expose via ESC pulumi-stacks
+        /// </summary>
+        public InputList<string> StackOutputs
+        {
+            get => _stackOutputs ?? (_stackOutputs = new InputList<string>());
+            set => _stackOutputs = value;
+        }
 
         /// <summary>
         /// Team to which the stack should be assigned.

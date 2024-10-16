@@ -7,7 +7,7 @@ import (
 	"context"
 	"reflect"
 
-	"github.com/pulumi-pequod/pequod-mlc-stackmgmt/sdk/go/stackmgmt/internal"
+	"github.com/pulumi-initech/initech-mlc-stackmgmt/sdk/go/stackmgmt/internal"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -38,6 +38,8 @@ type stackSettingsArgs struct {
 	DriftManagement *string `pulumi:"driftManagement"`
 	// Pulumi access token to set up as a deployment environment variable if provided.
 	PulumiAccessToken *string `pulumi:"pulumiAccessToken"`
+	// A list of output properties to expose via ESC pulumi-stacks
+	StackOutputs []string `pulumi:"stackOutputs"`
 	// Team to which the stack should be assigned.
 	TeamAssignment *string `pulumi:"teamAssignment"`
 	// Time to live time setting.
@@ -52,6 +54,8 @@ type StackSettingsArgs struct {
 	DriftManagement pulumi.StringPtrInput
 	// Pulumi access token to set up as a deployment environment variable if provided.
 	PulumiAccessToken pulumi.StringPtrInput
+	// A list of output properties to expose via ESC pulumi-stacks
+	StackOutputs pulumi.StringArrayInput
 	// Team to which the stack should be assigned.
 	TeamAssignment pulumi.StringPtrInput
 	// Time to live time setting.

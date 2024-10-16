@@ -1,5 +1,5 @@
-# Pequod Stack Management Multilanguage Component
-This multilanguage component is used to manage various stack settings when launching stacks in the pequod organization via new project wizard.
+# Stack Management Multilanguage Component
+This multilanguage component is used to manage various stack settings when launching stacks in the organization via new project wizard.
 It ensures stacks are configured as follows:
 * A time-to-live schedule is set.
 * A "drift with remediation" schedule is set
@@ -12,7 +12,7 @@ The core component is written in Typescript.
 ## Usage
 
 ### Python
-Pequod uses basic github distribution for the Python SDKs.
+Uses basic github distribution for the Python SDKs.
 
 To use with Python, add the following to the Pulumi project's `requirements.txt` file:
 * `pequod_stackmgmt @ git+https://github.com/pulumi-pequod/pequod-mlc-stackmgmt.git#subdirectory=sdk/python/bin`
@@ -49,7 +49,7 @@ So the `.csproj` should look like the following:
 
     <!-- Set up the github package sources for components used by this template. -->
     <Target Name="AddGithubPackageSources">
-        <Message Text="Adding Pequod.Stackmgmt source" />
+        <Message Text="Adding Initech.Stackmgmt source" />
         <Exec Command="./pkg-utils/add_github_pkg.sh Pequod.Stackmgmt pequod/github-package-install" />
     </Target> 
 

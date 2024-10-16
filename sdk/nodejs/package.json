@@ -1,5 +1,5 @@
 {
-    "name": "@pequod/stackmgmt",
+    "name": "@initech/stackmgmt",
     "version": "${VERSION}",
     "scripts": {
         "build": "tsc"
@@ -19,6 +19,6 @@
     "pulumi": {
         "resource": true,
         "name": "stackmgmt",
-        "server": "github://api.github.com/pulumi-pequod/pequod-mlc-stackmgmt"
+        "server": "github://api.github.com/pulumi-initech/initech-mlc-stackmgmt"
     }
 }

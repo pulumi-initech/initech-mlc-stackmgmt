@@ -1,0 +1,14 @@
+README.md
+setup.py
+initech_stackmgmt/__init__.py
+initech_stackmgmt/_utilities.py
+initech_stackmgmt/provider.py
+initech_stackmgmt/pulumi-plugin.json
+initech_stackmgmt/py.typed
+initech_stackmgmt/stack_settings.py
+initech_stackmgmt.egg-info/PKG-INFO
+initech_stackmgmt.egg-info/SOURCES.txt
+initech_stackmgmt.egg-info/dependency_links.txt
+initech_stackmgmt.egg-info/not-zip-safe
+initech_stackmgmt.egg-info/requires.txt
+initech_stackmgmt.egg-info/top_level.txt

@@ -11,17 +11,19 @@ export interface StackSettingsArgs{
   deleteStack?: string,
   teamAssignment?: string, 
   pulumiAccessToken?: pulumi.Output<string>,
+  outputKeys?: string[],
+  stackTags?: string[],
 }
 
 // Forces Pulumi stack settings for managing TTL and other settings.
 export class StackSettings extends pulumi.ComponentResource {
 
   constructor(name: string, args: StackSettingsArgs, opts?: pulumi.ComponentResourceOptions) {
-    super("pequod:stackmgmt:stacksettings", name, args, opts);
+    super("pulumi:stackmgmt:stacksettings", name, args, opts);
 
     // Settings used below
     const npwStack = "dev" // This is the stack that NPW creates initially.
-    const org = "pequod" // Temporary. Will use getOrganization()
+    const org = pulumi.getOrganization()
     const project = pulumi.getProject()
     const stack = pulumi.getStack() // this is the stack that is running
     const stackFqdn = `${org}/${project}/${stack}`
@@ -29,43 +31,43 @@ export class StackSettings extends pulumi.ComponentResource {
     // This may be the deployments automatically created access token or it may be one that is injected via config/environments
     const pulumiAccessToken = process.env["PULUMI_ACCESS_TOKEN"] || "notokenfound"
 
-    //// Purge Stack Tag ////
-    // This stack tag indicates whether or not the purge automation should delete the stack.
-    // Because the tag needs to remain on destroy and the provider balks if the stack tag already exists 
-    // (which would be the case on a pulumi up after a destroy), using the pulumiservice provider for this tag is not feasible.
-    // So, just hit the Pulumi Cloud API set the tag and that way it is not deleted on destroy.
-    let tagName = "delete_stack"
-    let tagValue = args.deleteStack || "True"
-    const setTag = async () => {
-      const headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `token ${pulumiAccessToken}`
-      };
+    // //// Purge Stack Tag ////
+    // // This stack tag indicates whether or not the purge automation should delete the stack.
+    // // Because the tag needs to remain on destroy and the provider balks if the stack tag already exists 
+    // // (which would be the case on a pulumi up after a destroy), using the pulumiservice provider for this tag is not feasible.
+    // // So, just hit the Pulumi Cloud API set the tag and that way it is not deleted on destroy.
+    // let tagName = "delete_stack"
+    // let tagValue = args.deleteStack || "True"
+    // const setTag = async () => {
+    //   const headers = {
+    //     'Accept': 'application/json',
+    //     'Content-Type': 'application/json',
+    //     'Authorization': `token ${pulumiAccessToken}`
+    //   };
     
-      // Delete the tag if it exists. Don't worry if it doesn't.
-      const deleteTagUrl = `https://api.pulumi.com/api/stacks/${stackFqdn}/tags/${tagName}`;
-      const deleteResponse = await fetch(deleteTagUrl, {
-        method: "DELETE",
-        headers,
-      })
+    //   // Delete the tag if it exists. Don't worry if it doesn't.
+    //   const deleteTagUrl = `https://api.pulumi.com/api/stacks/${stackFqdn}/tags/${tagName}`;
+    //   const deleteResponse = await fetch(deleteTagUrl, {
+    //     method: "DELETE",
+    //     headers,
+    //   })
     
-      // Set the tag.
-      const setTagUrl = `https://api.pulumi.com/api/stacks/${stackFqdn}/tags`;
-      const setResponse = await fetch(setTagUrl, {
-          method: "POST",
-          body: `{"name":"${tagName}","value":"${tagValue}"}`,
-          headers,
-      })
-      if (!setResponse.ok) {
-          let errMessage = "";
-          try {
-              errMessage = await setResponse.text();
-          } catch { }
-          throw new Error(`failed to set ${tagName} tag for stack, ${org}/${project}/${stack}: ${errMessage}`);
-      } 
-    }
-    setTag()
+    //   // Set the tag.
+    //   const setTagUrl = `https://api.pulumi.com/api/stacks/${stackFqdn}/tags`;
+    //   const setResponse = await fetch(setTagUrl, {
+    //       method: "POST",
+    //       body: `{"name":"${tagName}","value":"${tagValue}"}`,
+    //       headers,
+    //   })
+    //   if (!setResponse.ok) {
+    //       let errMessage = "";
+    //       try {
+    //           errMessage = await setResponse.text();
+    //       } catch { }
+    //       throw new Error(`failed to set ${tagName} tag for stack, ${org}/${project}/${stack}: ${errMessage}`);
+    //   } 
+    // }
+    // setTag()
     
     //// Deployment Settings Management ////
     // If a new stack is created by the user (vs via review stacks), get the current settings and 
@@ -99,6 +101,7 @@ export class StackSettings extends pulumi.ComponentResource {
     // But, only if this is NOT a review stack. Review stacks we just leave be.
     if (!(stack.includes(`pr-pulumi-${org}-${project}`))) {
       const deploymentSettings = getDeploymentSettings().then(settings => { 
+
         // If the stack being run doesn't match the stack that NPW created in the first place, 
         // modify the deployment settings to point at a branch name that matches the stack name.
         if (stack != npwStack) {
@@ -178,7 +181,8 @@ export class StackSettings extends pulumi.ComponentResource {
 
     //// Team Stack Assignment ////
     // If no team name given, then assign to the "DevTeam"
-    const teamAssignment = args.teamAssignment ?? "DevTeam"
+    if (args.teamAssignment) {
+    const teamAssignment = args.teamAssignment!
     const teamStackAssignment = new pulumiservice.TeamStackPermission(`${name}-team-stack-assign`, {
       organization: org,
       project: project,
@@ -186,6 +190,28 @@ export class StackSettings extends pulumi.ComponentResource {
       team: teamAssignment,
       permission: pulumiservice.TeamStackPermissionScope.Admin
     }, { parent: this, retainOnDelete: true })
+  }
+
+
+    //// ESC Output advertisement 
+    if (args.outputKeys) {
+      const yaml = args.outputKeys!.map(item => ` .   ${item}: \${stackRef.${stack}.${item}}`).join('\n');
+
+      const esc = new pulumiservice.Environment(`${name}-stack-env`, {
+        name: `${stack}-outputs`,
+        project: project,
+        organization: org,
+        yaml: new pulumi.asset.StringAsset(`
+values:
+  stackRef:
+    fn::open::pulumi-stacks:
+      stacks:
+        ${stack}:
+          stack: ${stackFqdn}
+  pulumiConfig:
+    ${yaml}`),
+      });
+    }
 
     this.registerOutputs({});
   }

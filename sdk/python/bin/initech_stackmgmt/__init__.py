@@ -13,7 +13,7 @@ _utilities.register(
  {
   "pkg": "stackmgmt",
   "mod": "index",
-  "fqn": "pequod_stackmgmt",
+  "fqn": "initech_stackmgmt",
   "classes": {
    "stackmgmt:index:StackSettings": "StackSettings"
   }
@@ -25,7 +25,7 @@ _utilities.register(
  {
   "pkg": "stackmgmt",
   "token": "pulumi:providers:stackmgmt",
-  "fqn": "pequod_stackmgmt",
+  "fqn": "initech_stackmgmt",
   "class": "Provider"
  }
 ]

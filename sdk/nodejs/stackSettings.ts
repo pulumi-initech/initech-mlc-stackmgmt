@@ -34,6 +34,7 @@ export class StackSettings extends pulumi.ComponentResource {
             resourceInputs["deleteStack"] = args ? args.deleteStack : undefined;
             resourceInputs["driftManagement"] = args ? args.driftManagement : undefined;
             resourceInputs["pulumiAccessToken"] = args ? args.pulumiAccessToken : undefined;
+            resourceInputs["stackOutputs"] = args ? args.stackOutputs : undefined;
             resourceInputs["teamAssignment"] = args ? args.teamAssignment : undefined;
             resourceInputs["ttlTime"] = args ? args.ttlTime : undefined;
         } else {
@@ -59,6 +60,10 @@ export interface StackSettingsArgs {
      * Pulumi access token to set up as a deployment environment variable if provided.
      */
     pulumiAccessToken?: pulumi.Input<string>;
+    /**
+     * A list of output properties to expose via ESC pulumi-stacks
+     */
+    stackOutputs?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Team to which the stack should be assigned.
      */

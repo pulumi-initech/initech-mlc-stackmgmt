@@ -17,6 +17,7 @@ class StackSettingsArgs:
                  delete_stack: Optional[pulumi.Input[str]] = None,
                  drift_management: Optional[pulumi.Input[str]] = None,
                  pulumi_access_token: Optional[pulumi.Input[str]] = None,
+                 stack_outputs: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  team_assignment: Optional[pulumi.Input[str]] = None,
                  ttl_time: Optional[pulumi.Input[float]] = None):
         """
@@ -24,6 +25,7 @@ class StackSettingsArgs:
         :param pulumi.Input[str] delete_stack: Stack delete setting for automated purge processing.
         :param pulumi.Input[str] drift_management: Drift management setting for refresh or correction.
         :param pulumi.Input[str] pulumi_access_token: Pulumi access token to set up as a deployment environment variable if provided.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] stack_outputs: A list of output properties to expose via ESC pulumi-stacks
         :param pulumi.Input[str] team_assignment: Team to which the stack should be assigned.
         :param pulumi.Input[float] ttl_time: Time to live time setting.
         """
@@ -33,6 +35,8 @@ class StackSettingsArgs:
             pulumi.set(__self__, "drift_management", drift_management)
         if pulumi_access_token is not None:
             pulumi.set(__self__, "pulumi_access_token", pulumi_access_token)
+        if stack_outputs is not None:
+            pulumi.set(__self__, "stack_outputs", stack_outputs)
         if team_assignment is not None:
             pulumi.set(__self__, "team_assignment", team_assignment)
         if ttl_time is not None:
@@ -75,6 +79,18 @@ class StackSettingsArgs:
         pulumi.set(self, "pulumi_access_token", value)
 
     @property
+    @pulumi.getter(name="stackOutputs")
+    def stack_outputs(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        A list of output properties to expose via ESC pulumi-stacks
+        """
+        return pulumi.get(self, "stack_outputs")
+
+    @stack_outputs.setter
+    def stack_outputs(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "stack_outputs", value)
+
+    @property
     @pulumi.getter(name="teamAssignment")
     def team_assignment(self) -> Optional[pulumi.Input[str]]:
         """
@@ -107,6 +123,7 @@ class StackSettings(pulumi.ComponentResource):
                  delete_stack: Optional[pulumi.Input[str]] = None,
                  drift_management: Optional[pulumi.Input[str]] = None,
                  pulumi_access_token: Optional[pulumi.Input[str]] = None,
+                 stack_outputs: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  team_assignment: Optional[pulumi.Input[str]] = None,
                  ttl_time: Optional[pulumi.Input[float]] = None,
                  __props__=None):
@@ -117,6 +134,7 @@ class StackSettings(pulumi.ComponentResource):
         :param pulumi.Input[str] delete_stack: Stack delete setting for automated purge processing.
         :param pulumi.Input[str] drift_management: Drift management setting for refresh or correction.
         :param pulumi.Input[str] pulumi_access_token: Pulumi access token to set up as a deployment environment variable if provided.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] stack_outputs: A list of output properties to expose via ESC pulumi-stacks
         :param pulumi.Input[str] team_assignment: Team to which the stack should be assigned.
         :param pulumi.Input[float] ttl_time: Time to live time setting.
         """
@@ -146,6 +164,7 @@ class StackSettings(pulumi.ComponentResource):
                  delete_stack: Optional[pulumi.Input[str]] = None,
                  drift_management: Optional[pulumi.Input[str]] = None,
                  pulumi_access_token: Optional[pulumi.Input[str]] = None,
+                 stack_outputs: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  team_assignment: Optional[pulumi.Input[str]] = None,
                  ttl_time: Optional[pulumi.Input[float]] = None,
                  __props__=None):
@@ -162,6 +181,7 @@ class StackSettings(pulumi.ComponentResource):
             __props__.__dict__["delete_stack"] = delete_stack
             __props__.__dict__["drift_management"] = drift_management
             __props__.__dict__["pulumi_access_token"] = pulumi_access_token
+            __props__.__dict__["stack_outputs"] = stack_outputs
             __props__.__dict__["team_assignment"] = team_assignment
             __props__.__dict__["ttl_time"] = ttl_time
         super(StackSettings, __self__).__init__(

@@ -1,4 +1,4 @@
-module github.com/pulumi-pequod/pequod-stackmgmt/provider
+module github.com/pulumi-initech/initech-stackmgmt/provider
 
 go 1.21
 
